@@ -16,7 +16,6 @@ function create(){
 	loadGame();
 	game.stage.disableVisibilityChange = true;
 	game.physics.startSystem(Phaser.Physics.Arcade)
-
 	background = game.add.tileSprite(0,0, window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, 'background');
 	
 	platforms = game.add.group();
@@ -42,7 +41,7 @@ function create(){
 	cornPerClickLevelText = game.add.text(game.world.centerX - 290, game.world.centerY + 330,'Level: '+ formatNumber(gameData.cornPerClickLevel), buttonStyle);
 
 	idleText = game.add.text(game.world.centerX + 80, game.world.centerY + 250, 'Upgrade CPS', {font: 'Nueva Std', fontSize: '32px', fill: '#000000'});
-	cornGainRateText = game.add.text(game.world.centerX + 30, game.world.centerY + 280, 'Corn Per Second: ' + formatNumber(gameData.cornGainRateLevel), buttonStyle);
+	cornGainRateText = game.add.text(game.world.centerX + 30, game.world.centerY + 280, 'Corn Per Second: ' + formatNumber(gameData.cornGainRate), buttonStyle);
 	cornRateLevelCostText = game.add.text(game.world.centerX + 30, game.world.centerY + 305,'Cost: '+ formatNumber(gameData.upgradeCornRateCost), buttonStyle);
 	cornRateLevelText = game.add.text(game.world.centerX + 30, game.world.centerY + 330,'Level: '+ formatNumber(gameData.cornGainRateLevel), buttonStyle);
 
@@ -76,21 +75,38 @@ function upgradeClickLevel(){
 function upgradeCornGainRate(){
 	if(gameData.totalCorn >= gameData.upgradeCornRateCost){
 		gameData.cornGainRateLevel++;
-		gameData.cornGainRate++;
+		gameData.cornGainRate+= CPSLevelModifier(gameData.cornGainRateLevel);
 		gameData.totalCorn -= gameData.upgradeCornRateCost;
 		gameData.upgradeCornRateCost = Math.floor(25 * Math.pow(1.5, gameData.cornGainRateLevel));
-		if(gameData.cornGainRate % 25 == 0){
-			gameData.cornGainRate *= 2;
-		}
+
 	}
 }
 
+function CPSLevelModifier(level){
+	var rate;
+	switch(true){
+		case (level <= 10):
+			rate = 1;
+			break;
+		case (level > 10 && level <= 20):
+			rate = 5;
+			break;
+		case (level > 20 && level <= 30):
+			rate = 15;
+			break;
+		case( level > 30 ):
+			rate = 20;
+			break;
+
+	}
+	return rate;
+}
 
 function renderCorn(){
 
 	for (var i = 0; i < gameData.cornGainRateLevel; i++)
 	{
-		var cornImage = fallingCorn.create(Math.random() * window.innerWidth, - 150, 'cornkernel');
+		var cornImage = fallingCorn.create(Math.random() * window.innerWidth, -50, 'cornkernel');
 		cornImage.body.gravity.y = Math.random() * 100 + 50;
 	}
 	gameData.totalCorn += gameData.cornGainRate;
@@ -103,10 +119,12 @@ function saveGame(){
 
 function loadGame(){
 	var savedData = JSON.parse(localStorage.getItem("savedData"));
-	if(localStorage.getItem("savedData") == null){
+	
+	if(localStorage.getItem("savedData") == null || savedData.upgradeClickCost === "undefined"){
 		console.log("No Save Detected");
 		initGameData();
-	} else {
+	}
+	else {
 		gameData = savedData;
 		offlineProgression();
 	}
@@ -156,5 +174,4 @@ function offlineProgression(){
 	var offlineGains = timeSinceLastPlayed * gameData.cornGainRate;
 	gameData.totalCorn += offlineGains;
 	console.log("Corn gained since last offline " + offlineGains);
-
 }
