@@ -64,7 +64,7 @@ function generateCorn() {
 function upgradeClickLevel(){
 	if(gameData.totalCorn >= gameData.upgradeClickCost){
 		gameData.cornPerClickLevel++;
-		gameData.cornPerClick+= Math.round(Math.floor(1 * Math.pow(1.01,gameData.cornPerClickLevel)));
+		gameData.cornPerClick+= Math.round(Math.floor(1 * Math.pow(1.1,gameData.cornPerClickLevel)));
 		gameData.totalCorn -= gameData.upgradeClickCost;
 		gameData.upgradeClickCost = Math.floor(10 * Math.pow(1.5, gameData.cornPerClickLevel));
 		if(gameData.cornPerClickLevel % 25 == 0)
@@ -75,7 +75,7 @@ function upgradeClickLevel(){
 function upgradeCornGainRate(){
 	if(gameData.totalCorn >= gameData.upgradeCornRateCost){
 		gameData.cornGainRateLevel++;
-		gameData.cornGainRate+= Math.round(Math.floor(1 * Math.pow(1.15,gameData.cornGainRateLevel)));
+		gameData.cornGainRate+= Math.round(Math.floor(1 * Math.pow(1.2,gameData.cornGainRateLevel)));
 		gameData.totalCorn -= gameData.upgradeCornRateCost;
 		gameData.upgradeCornRateCost = Math.floor(25 * Math.pow(1.5, gameData.cornGainRateLevel));
 	}
