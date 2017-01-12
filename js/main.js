@@ -50,7 +50,7 @@ function create(){
 	game.time.events.loop(Phaser.Timer.SECOND, renderCorn, this);
 	game.time.events.loop(Phaser.Timer.SECOND, saveGame, this);
 	game.time.events.loop(Phaser.Timer.SECOND / 5, updateButtonDetails, this);
-	game.time.events.loop(Phaser.Timer.SECOND * (Math.random() * 40) , spawnGoldenCorn,this);
+	game.time.events.loop(Phaser.Timer.SECOND * 150) , spawnGoldenCorn,this);
 
 }
 
