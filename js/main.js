@@ -4,12 +4,13 @@ var buttonStyle = {font: 'Nueva Std', fontSize: '28px', fill: '#FFFFFF'};
 
 function preload(){
 	game.load.image('background', 'assets/cornfieldbackground.png');
-	game.load.image('cornclick', 'assets/clickbutton.png');
+	game.load.spritesheet('cornclick', 'assets/clickbutton.png',275,85);
 	game.load.image('ground', 'assets/platform.png');
-	game.load.image('upgradecornclick', 'assets/upgradebutton.png');
+	game.load.spritesheet('upgradecornclick', 'assets/upgradebutton.png',310, 144);
+	game.load.spritesheet('upgradecornrate', 'assets/upgradebuttonright.png',310,144);
+
 	game.load.image('cornkernel', 'assets/kernels.png');
 	game.load.image('deletesave', 'assets/deleteSave.png');
-	game.load.image('upgradecornrate', 'assets/upgradebuttonright.png');
 }
 
 function create(){
@@ -28,7 +29,7 @@ function create(){
 	cornDrawLimit.scale.setTo(2,2);
 	cornDrawLimit.body.immovable = true;
 
-	cornClick = game.add.button(game.world.centerX - 160, game.world.centerY + 150, 'cornclick', generateCorn, this, 2,1,0);
+	cornClick = game.add.button(game.world.centerX - 140, game.world.centerY + 130, 'cornclick', generateCorn, this, 2,1,0);
 	upgradeClick = game.add.button(game.world.centerX - 320, game.world.centerY + 230, 'upgradecornclick', upgradeClickLevel, this, 2, 1, 0);
 	upgradeCornRate = game.add.button(game.world.centerX , game.world.centerY + 230, 'upgradecornrate', upgradeCornGainRate, this, 2, 1, 0);
 	deleteSaveButton = game.add.button(0, game.world.height - 65, 'deletesave', initGameData , this, 2, 1, 0);
