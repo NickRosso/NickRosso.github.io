@@ -10,7 +10,7 @@ function preload(){
 	game.load.spritesheet('upgradecornrate', 'assets/upgradebuttonright.png',310,144);
 
 	game.load.image('cornkernel', 'assets/kernels.png');
-	game.load.image('goldenkernel', 'assets/goldenkernel.png');
+	game.load.image('goldenkernel', 'assets/goldenKernel.png');
 	game.load.image('deletesave', 'assets/deleteSave.png');
 }
 
