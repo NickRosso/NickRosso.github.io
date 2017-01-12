@@ -10,6 +10,7 @@ function preload(){
 	game.load.spritesheet('upgradecornrate', 'assets/upgradebuttonright.png',310,144);
 
 	game.load.image('cornkernel', 'assets/kernels.png');
+	game.load.image('goldenkernel', 'assets/goldenkernel.png');
 	game.load.image('deletesave', 'assets/deleteSave.png');
 }
 
@@ -48,7 +49,9 @@ function create(){
 
 	game.time.events.loop(Phaser.Timer.SECOND, renderCorn, this);
 	game.time.events.loop(Phaser.Timer.SECOND, saveGame, this);
-	game.time.events.loop(Phaser.Timer.SECOND / 5, updateButtonDetails, this)
+	game.time.events.loop(Phaser.Timer.SECOND / 5, updateButtonDetails, this);
+	game.time.events.loop(Phaser.Timer.SECOND * (Math.random() * 40) , spawnGoldenCorn,this);
+
 }
 
 function update(){
@@ -100,12 +103,22 @@ function saveGame(){
 function loadGame(){
 	var savedData = JSON.parse(localStorage.getItem("savedData"));
 	
-	if(localStorage.getItem("savedData") == null || savedData.upgradeClickCost === "undefined"){
+	if(localStorage.getItem("savedData") == null || savedData.offlineProgressionModifiers === "undefined"){
 		console.log("No Save Detected");
 		initGameData();
 	}
 	else {
-		gameData = savedData;
+		gameData = {
+			totalCorn: savedData.totalCorn,
+
+			cornPerClickLevel: savedData.cornPerClickLevel,
+			cornPerClick: savedData.cornPerClick,
+			upgradeClickCost: savedData.upgradeClickCost,
+			cornGainRateLevel: savedData.cornGainRateLevel,
+			cornGainRate: savedData.cornGainRate,
+			upgradeCornRateCost: savedData.upgradeCornRateCost,
+			onlineTime: Math.round(new Date() / 1000)
+		}
 		offlineProgression();
 	}
 }
@@ -154,4 +167,17 @@ function offlineProgression(){
 	var offlineGains = timeSinceLastPlayed * gameData.cornGainRate;
 	gameData.totalCorn += offlineGains;
 	console.log("Corn gained since last offline " + offlineGains);
+}
+
+function spawnGoldenCorn(){
+	var goldCornImage = fallingCorn.create(Math.random() * window.innerWidth, -50, 'goldenkernel');
+	goldCornImage.body.gravity.y = Math.random() * 100 + 50;
+	goldCornImage.inputEnabled = true;
+	goldCornImage.events.onInputDown.add(goldCornReward,this);
+
+}
+function goldCornReward(goldCornImage){
+	var reward = (gameData.cornGainRate + gameData.cornPerClick) * 1000;
+	gameData.totalCorn += reward;
+	goldCornImage.kill();
 }
