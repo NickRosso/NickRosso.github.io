@@ -117,7 +117,7 @@ function loadGame(){
 			cornGainRateLevel: savedData.cornGainRateLevel,
 			cornGainRate: savedData.cornGainRate,
 			upgradeCornRateCost: savedData.upgradeCornRateCost,
-			onlineTime: Math.round(new Date() / 1000)
+			onlineTime: savedData.onlineTime
 		}
 		offlineProgression();
 	}
